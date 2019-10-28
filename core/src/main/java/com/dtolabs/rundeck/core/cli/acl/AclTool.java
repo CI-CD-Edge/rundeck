@@ -27,8 +27,8 @@ import com.dtolabs.rundeck.core.cli.*;
 import org.rundeck.core.auth.AuthConstants;
 import org.apache.commons.cli.*;
 import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
-import org.apache.log4j.PropertyConfigurator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.Yaml;
 
@@ -46,7 +46,7 @@ public class AclTool extends BaseTool {
     /**
      * log4j
      */
-    public static final Logger log4j = Logger.getLogger(AclTool.class);
+    public static final Logger log4j = LoggerFactory.getLogger(AclTool.class);
 
     /**
      * short option string for file path
@@ -131,7 +131,7 @@ public class AclTool extends BaseTool {
             throws IOException, PoliciesParseException
     {
         if (null == cliToolLogger) {
-            PropertyConfigurator.configure(Constants.getLog4jPropertiesFile().getAbsolutePath());
+            //TODO: What's the equivalent? Do we care? PropertyConfigurator.configure(Constants.getLog4jPropertiesFile().getAbsolutePath());
             clilogger = new Log4JCLIToolLogger(log4j);
         } else {
             this.clilogger = cliToolLogger;

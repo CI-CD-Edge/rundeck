@@ -26,7 +26,6 @@ package com.dtolabs.rundeck.core.cli;
 import com.dtolabs.rundeck.core.Constants;
 import com.dtolabs.rundeck.core.VersionConstants;
 import org.apache.commons.cli.*;
-import org.apache.log4j.PropertyConfigurator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -149,7 +148,7 @@ public abstract class BaseTool implements CLITool {
      * @throws CLIToolException if an error occurs
      */
     public void run(final String[] args) throws CLIToolException {
-        PropertyConfigurator.configure(Constants.getLog4jPropertiesFile().getAbsolutePath());
+        //TODO: What's the equivalent PropertyConfigurator.configure(Constants.getLog4jPropertiesFile().getAbsolutePath());
         CommandLine cli = parseArgs(args);
         validateOptions(cli,args);
         go();
