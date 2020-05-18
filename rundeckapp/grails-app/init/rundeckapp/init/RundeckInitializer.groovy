@@ -23,7 +23,9 @@ import org.springframework.core.io.Resource
 import rundeckapp.Application
 import rundeckapp.cli.CommandLineSetup
 
+import java.nio.file.Files
 import java.nio.file.Path
+import java.nio.file.Paths
 import java.security.ProtectionDomain
 import java.security.SecureRandom
 import java.util.jar.JarFile
@@ -118,8 +120,8 @@ class RundeckInitializer {
             coreJar = extractAndLoadCoreJar()
             final File bindir = new File(toolsdir,"bin");
             DEBUG("Extracting bin scripts to: " + config.cliOptions.binDir + " ... ");
-            extractBin(bindir, coreJar);
-            copyToolLibs(toolslibdir, coreJar);
+            //extractBin(bindir, coreJar);
+            //copyToolLibs(toolslibdir, coreJar);
             if(thisJar.isDirectory()) {
                 File sourceTemplateDir = Environment.isDevelopmentEnvironmentAvailable() ?
                                          new File(System.getProperty("user.dir"),"templates") :
@@ -425,6 +427,8 @@ class RundeckInitializer {
             );
         }
 
+        setupLog4j2ConfigurationFile()
+
         if (config.useJaas) {
             if(! System.getProperty("java.security.auth.login.config"))
                 System.setProperty("java.security.auth.login.config", new File(config.configDir,
@@ -433,6 +437,19 @@ class RundeckInitializer {
         }
         //Set runtime environment
         System.setProperty("rd.rtenv",Environment.current.name.toLowerCase())
+    }
+
+    void setupLog4j2ConfigurationFile() {
+
+        if(!System.getProperty("log4j.configurationFile")) {
+            Path log4j2ConfPath = Paths.get(config.configDir+"/log4j2.yaml")
+            if(!Files.exists(log4j2ConfPath)) {
+                File externalLog4jConf = log4j2ConfPath.toFile()
+                externalLog4jConf << new ClassPathResource("log4j2.yaml").inputStream
+            }
+            System.setProperty("log4j.configurationFile",log4j2ConfPath.toString())
+        }
+
     }
 
     void initConfigurations() {
